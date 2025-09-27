@@ -12,7 +12,7 @@ If on Windows install these depedencies in WSL.
 With the project cloned via `git clone https://github.com/BJL156/tinyops` follow these steps:
 1. Change into the directory of any project for example:
 ```
-cd guessing_game
+cd x86_64/guessing_game
 ```
 2. In a Linux environment (If on Windows use WSL) run the makefile:
 ```
