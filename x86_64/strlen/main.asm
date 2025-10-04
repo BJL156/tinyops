@@ -6,7 +6,7 @@ global _start
 
 ; returns rax with the length of a string without including the null terminator.
 strlen:
-  mov rax, 0
+  mov rax, 0 ; this will be the counter to find the length of the string.
 .count_characters_loop:
   cmp byte [rdi + rax], 0x0 ; check if the index into the string is a null terminator.
   je .count_characters_done
