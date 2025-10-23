@@ -48,7 +48,7 @@ _start:
 
   mov rbx, rax
 
-  ; exit codes at least in Linux can't be negative and can only be up to 256.
+  ; exit codes at least in Linux can't be negative and can only be up to 255.
   ; meaning you'll get weird results.
   ; for simplicity (no `itoa` function), I've kept it to just be the exit code.
 
