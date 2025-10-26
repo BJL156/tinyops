@@ -3,12 +3,14 @@ BOARD_HEIGHT equ 10
 
 section .data
   ball: db 'o'
-  bg:   db '-'
+  bg:   db ' '
+  side: db '|'
+  top:  db '-'
   nl:   db 0xA
 
   ball_x: dq 1
   ball_y: dq 2
-  dir_x:  dq 1
+  dir_x:  dq 2
   dir_y:  dq 1
 
   seconds:     dq 0
@@ -56,10 +58,35 @@ sleep:
   syscall
   ret
 
+; void print_horizontal()
+print_horizontal:
+  mov rdi, side
+  call putchar
+
+  mov r12, 0
+.border_loop:
+  mov rdi, top
+  call putchar
+  inc r12
+  cmp r12, BOARD_WIDTH
+  jne .border_loop
+
+  mov rdi, side
+  call putchar
+  mov rdi, nl
+  call putchar
+
+  ret
+
 ; void print_board()
 print_board:
+  call print_horizontal
+
   mov r12, 0
 .board_loop_outer:
+  mov rdi, side
+  call putchar
+
   mov r13, 0
 .board_loop_inner:
   mov rax, r12
@@ -80,6 +107,8 @@ print_board:
   cmp r13, BOARD_WIDTH
   jne .board_loop_inner
 
+  mov rdi, side
+  call putchar
   mov rdi, nl
   call putchar
 
@@ -87,15 +116,16 @@ print_board:
   cmp r12, BOARD_HEIGHT
   jne .board_loop_outer
 
+  call print_horizontal
   ret
 
 _start:
   call clear_terminal
 .logic_loop:
   cmp qword [ball_y], BOARD_HEIGHT - 1
-  je .bounce_y
+  jge .bounce_y
   cmp qword [ball_y], 0
-  je .bounce_y
+  jle .bounce_y
   mov rax, [ball_y]
   add rax, [dir_y]
   mov qword [ball_y], rax
@@ -109,9 +139,9 @@ _start:
 
 .handle_x:
   cmp qword [ball_x], BOARD_WIDTH - 1
-  je .bounce_x
+  jge .bounce_x
   cmp qword [ball_x], 0
-  je .bounce_x
+  jle .bounce_x
   mov rax, [ball_x]
   add rax, [dir_x]
   mov qword [ball_x], rax
